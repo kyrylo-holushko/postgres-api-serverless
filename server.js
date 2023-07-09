@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 const rateLimit = require('express-rate-limit');
+const database = require('./pgConnect');
 
 /* Controllers */
 const signupController = require('./controllers/signupController');
@@ -28,7 +29,11 @@ app.get('/', (req, res) => {
 
 app.post('/api/signup', singUpLimiter, signupController.signup);
 
-
-app.listen(PORT, ()=>{
-    console.log("API listening on: " + PORT);
-});
+(() => {
+  try {
+    database.connect();
+    app.listen(PORT, ()=>{console.log("API listening on: " + PORT);});
+  } catch(error) {
+    console.log('ERROR in either SQL or SERVER connection', error);
+  }  
+})
