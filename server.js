@@ -29,15 +29,14 @@ app.get('/', (req, res) => {
 
 app.post('/api/signup', singUpLimiter, signupController.signup);
 
-(() => {
+/* (() => {
   try {
     database.connect();
     app.listen(PORT, ()=>{console.log("API listening on: " + PORT);});
   } catch(error) {
     console.log('ERROR in either SQL or SERVER connection', error);
   }  
-});
+}); */
 
-database.initialize().then(function() {
-  app.listen(PORT, ()=>{console.log("API listening on: " + PORT)});
-})
+app.listen(PORT, ()=>{console.log("API listening on: " + PORT)});
+

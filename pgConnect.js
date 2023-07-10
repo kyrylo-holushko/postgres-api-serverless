@@ -1,8 +1,20 @@
-const { Sequelize } = require('sequelize');
+//const { Sequelize } = require('sequelize');
+const postgres = require('postgres');
 const dotenv = require('dotenv');
-const { HOST, DATABASE, USERNAME, PASSWORD } = process.env;
+dotenv.config();
+const { PGHOST, PGDATABASE, PGUSERNAME, PGPASSWORD } = process.env;
+console.log(PGHOST, PGDATABASE, PGUSERNAME, PGPASSWORD);
 
-const sequelize = new Sequelize(DATABASE, USERNAME, PASSWORD, {
+
+const sql = postgres({
+  host                 : PGHOST,            // Postgres ip address[s] or domain name[s]
+  port                 : 5432,          // Postgres server port[s]
+  database             : PGDATABASE,            // Name of database to connect to
+  username             : PGUSERNAME,            // Username of database user
+  password             : PGPASSWORD            // Password of database user
+});
+
+/* const sequelize = new Sequelize(DATABASE, USERNAME, PASSWORD, {
     host: HOST,
     dialect: 'postgres',
     port: 5432,
@@ -10,7 +22,7 @@ const sequelize = new Sequelize(DATABASE, USERNAME, PASSWORD, {
         ssl: { rejectUnauthorized: false }
     },
     query: { raw: true }
-  });
+  }); */
 
 /* exports.connect = async () => { 
     
@@ -22,12 +34,30 @@ const sequelize = new Sequelize(DATABASE, USERNAME, PASSWORD, {
     }
 };
  */
-exports.initialize = () => {
+/* exports.initialize = () => {
     return new Promise((resolve, reject)=>{
         sequelize.sync().then(function(){ //.authenticate
             resolve('Database Connected');
         }).catch((e)=>{reject(`${e}, unable to connect to the database`)});
     });
-};
+};  */
 
-module.exports.sequelize;
+/* exports.initialize = () => {
+    return new Promise((resolve, reject)=>{
+        
+        sql = postgres('postgres://username:password@host:port/database', {
+            host                 : PGHOST,            // Postgres ip address[s] or domain name[s]
+            port                 : 5432,          // Postgres server port[s]
+            database             : PGDATABASE,            // Name of database to connect to
+            username             : PGUSERNAME,            // Username of database user
+            password             : PGPASSWORD            // Password of database user
+        });
+        if(sql)
+            resolve('Database Connected');
+        else
+            reject('Could not connect to Database');
+        
+    });
+};  */
+
+module.exports.sql = sql;
