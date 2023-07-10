@@ -10,13 +10,13 @@
   "author": "Kyrylo Holushko",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.0",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-rate-limit": "^6.7.1",
     "nodemon": "^2.0.22",
     "pg": "^8.11.1",
     "pg-hstore": "^2.3.4",
-    "postgres": "^3.3.5",
-    "sequelize": "^6.32.1"
+    "postgres": "^3.3.5"
   }
 }
