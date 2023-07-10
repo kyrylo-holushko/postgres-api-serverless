@@ -16,7 +16,7 @@ exports.signup = (req, res) => {
         console.log('Encrypted Password is: ', data.password);
         console.log('SignUp Controller');
         const result = SignUp.post(data);
-        if((typeof result)=="string")
+        if(result instanceof Error)
             res.status(500).json({ message: result });
         else 
             res.status(201).json({ message: 'New User Created', data: result});
