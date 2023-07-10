@@ -36,4 +36,8 @@ app.post('/api/signup', singUpLimiter, signupController.signup);
   } catch(error) {
     console.log('ERROR in either SQL or SERVER connection', error);
   }  
+});
+
+database.initialize().then(function() {
+  app.listen(PORT, ()=>{console.log("API listening on: " + PORT)});
 })
