@@ -2,10 +2,11 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv');
 const rateLimit = require('express-rate-limit');
-const database = require('./pgConnect');
+const jwt = require('jsonwebtoken');
 
 /* Controllers */
 const signupController = require('./controllers/signupController');
+const loginController = require('./controllers/loginController');
 
 dotenv.config();
 const { PORT } = process.env;
@@ -28,15 +29,10 @@ app.get('/', (req, res) => {
 });
 
 app.post('/api/signup', singUpLimiter, signupController.signup);
+app.post('/api/login', loginController.login);
 
-/* (() => {
-  try {
-    database.connect();
-    app.listen(PORT, ()=>{console.log("API listening on: " + PORT);});
-  } catch(error) {
-    console.log('ERROR in either SQL or SERVER connection', error);
-  }  
-}); */
+app.all('*', (req, res) => {
+  res.status(404).json({ message: '404 Page Not Found' });
+});
 
 app.listen(PORT, ()=>{console.log("API listening on: " + PORT)});
-
