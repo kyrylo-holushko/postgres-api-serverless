@@ -5,10 +5,10 @@ dotenv.config();
 const { JWTSECRET, JWTEXPIRY } = process.env;
 
 exports.login = (req, res) => {
-    const { usernameOrEmail, password } = req.boy;
+    const { usernameOrEmail, password } = req.body;
     let data;
     if(/@/.test(usernameOrEmail)){
-        Login.checkEmail(usernameOrEmail, password).then((result) => {
+        Login.checkEmail(usernameOrEmail).then((result) => {
             if(result instanceof Error)
                 throw result;
             else
@@ -18,7 +18,7 @@ exports.login = (req, res) => {
         });
     }     
     else {
-        Login.checkUsername(usernameOrEmail, password).then((result) => {
+        Login.checkUsername(usernameOrEmail).then((result) => {
             if(result instanceof Error)
                 throw result;
             else

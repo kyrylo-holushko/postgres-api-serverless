@@ -1,6 +1,6 @@
 const db = require('../pgConnect');
 
-exports.checkEmail = async (email, password) => {
+exports.checkEmail = async (email) => {
     try {
         const EmailExists = await db.sql`SELECT * FROM users WHERE email = ${email} RETURNING id, password`;
         if(EmailExists.length===0){
@@ -13,7 +13,7 @@ exports.checkEmail = async (email, password) => {
     }
 };
 
-exports.checkUsername = async (username, password) => {
+exports.checkUsername = async (username) => {
     try {
         const UserNameExists = await db.sql`SELECT * FROM users WHERE username = ${username} RETURNING id, password`;
         if(UserNameExists.length===0){
