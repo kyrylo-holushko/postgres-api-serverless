@@ -1,8 +1,14 @@
 const SignUp = require('../models/signupModel');
+const email = require("email-validator");
 const bcrypt = require('bcrypt');
 
 exports.signup = (req, res) => {
-    if(req.body.password!==req.body.passwordConfirmed)
+    const usernameRegEx = RegExp(/^[a-zA-Z0-9]{1,15}$/);
+    if(!usernameRegEx.test(req.body.username))
+        res.status(500).json({ message: "Username must be alphanumeric only and no more than 15 characters!"});
+    else if(!email.validate(req.body.email))
+        res.status(500).json({ message: "Email entered is not a valid email!"});
+    else if(req.body.password!==req.body.passwordConfirmed)
         res.status(500).json({ message: "Passwords don't match, Account not created!"}) 
     else {
         let { passwordConfirmed, ...data } = req.body;
