@@ -12,20 +12,20 @@ exports.getBags = (req, res) => {
     });
     //get all bags associated with user id
 
-}
+};
 
 exports.createBag = (req, res) => {
-    let { bvolume, bweight, ...data } = req.body;
-    if(!bvolume)
+    let { ...data } = req.body;
+    if(!data.bvolume)
         data.bvolume = null;
-    if(!bweight)
+    if(!data.bweight)
         data.bweight = null;
     Bag.createBag(data).then((result)=>{
         res.status(201).json({ message: 'New Bag Created', data: result });
     }).catch(e=>{
         res.status(500).json({ message: 'Bag could not be created!' });
     });
-}
+};
 
 
 exports.editBag = (req, res) => {
@@ -34,7 +34,7 @@ exports.editBag = (req, res) => {
 
     // [OPTIONAL] edit bvolume and bweight
 
-}
+};
 
 exports.deleteBag = (req, res) => {
     // check if bag is empty first
@@ -50,4 +50,4 @@ exports.deleteBag = (req, res) => {
     */
 
 
-}
+};
