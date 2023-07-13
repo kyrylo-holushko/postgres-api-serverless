@@ -50,6 +50,7 @@ app.get('/', (req, res) => {
 app.post('/api/signup', singUpLimiter, signupController.signup);
 app.post('/api/login', loginController.login);
 app.get('/api/bags/:id', checkAuth, bagController.getBags);
+app.post('/api/bags', checkAuth, bagController.createBag);
 
 app.all('*', (req, res) => {
   res.status(404).json({ message: '404 Page Not Found' });

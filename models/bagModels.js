@@ -11,3 +11,12 @@ exports.findAllBags = async (uid) => {
         console.log(error);
     }
 };
+
+exports.createBag = async (data) => {
+    try {
+        const result = await db.sql`INSERT INTO bags (bname, bvolume, bweight, uid) VALUES (${data.bname}, ${data.bvolume}, ${data.bweight}, ${data.uid}) RETURNING *`;
+        return result[0];
+    } catch(error) {
+        console.log(error);
+    }   
+};

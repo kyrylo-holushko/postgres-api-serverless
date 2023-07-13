@@ -15,8 +15,16 @@ exports.getBags = (req, res) => {
 }
 
 exports.createBag = (req, res) => {
-    //post bag
-
+    let { bvolume, bweight, ...data } = req.body;
+    if(!bvolume)
+        data.bvolume = null;
+    if(!bweight)
+        data.bweight = null;
+    Bag.createBag(data).then((result)=>{
+        res.status(201).json({ message: 'New Bag Created', data: result });
+    }).catch(e=>{
+        res.status(500).json({ message: 'Bag could not be created!' });
+    });
 }
 
 
