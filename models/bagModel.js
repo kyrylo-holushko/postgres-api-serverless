@@ -23,12 +23,15 @@ exports.createBag = async (data, uid) => {
 
 exports.editBag = async (bid, uid, query) => {
     try {
+        console.log('BAG ID:', bid);
+        console.log('USER ID:', uid);
         const BagExists = await db.sql`SELECT * FROM bags WHERE bid = ${bid}`;
         if(BagExists.length===0){
             return Error('This bag does not exist.');
         } else if(BagExists[0].uid!==uid){
-            return Error('This is not your bag! Could not update bag.');
+            return Error('This is not your bag!');
         } else {
+            console.log('QUERY STRING:', query);
             const result = await db.sql`UPDATE bags SET ${query} WHERE bid = ${bid}`;
             return result[0];
         }

@@ -33,7 +33,7 @@ checkAuth = (req, res, next) => {
       throw Error('Authentication Failed!');
     }
     const decodedToken = jwt.verify(token, JWTSECRET);
-    req.userData = {userID: decodedToken.UserID};
+    req.userData = {userID: decodedToken.uid};
     next();
   } catch(error){
     return next(error);
@@ -49,9 +49,9 @@ app.get('/', (req, res) => {
 
 app.post('/api/signup', singUpLimiter, signupController.signup);
 app.post('/api/login', loginController.login);
-app.get('/api/bags/:uid', checkAuth, bagController.getBags);
+app.get('/api/bags', checkAuth, bagController.getBags);
 app.post('/api/bags', checkAuth, bagController.createBag);
-app.patch('/api/bag/:bid', checkAuth, bagController.editBag);
+app.patch('/api/bags/:id', checkAuth, bagController.editBag);
 
 app.all('*', (req, res) => {
   res.status(404).json({ message: '404 Page Not Found' });

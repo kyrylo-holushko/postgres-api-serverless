@@ -1,7 +1,7 @@
-const Bag = require('../models/bagModels');
+const Bag = require('../models/bagModel');
 
 exports.getBags = (req, res) => {
-    Bag.findAllBags(req.params.uid).then((result)=>{
+    Bag.findAllBags(req.userData.userID).then((result)=>{
         if(result instanceof Error)
             throw result;
         else
@@ -28,10 +28,14 @@ exports.createBag = (req, res) => {
 
 exports.editBag = (req, res) => {
     const queryString = queryBuilder(req.body);
+    console.log('Assembled query string:',queryString);
     Bag.editBag(req.params.id, req.userData.userID, queryString).then((result)=>{
-        res.status(200).json({ message: 'Bag has been Updated!', data: result});
+        if(result instanceof Error)
+            throw result;
+        else
+            res.status(200).json({ message: 'Bag has been Updated!', data: result});
     }).catch(e=>{
-        res.status(500).json({ message: 'Bag could not be updated!' });
+        res.status(500).json({ message: `${e.message} Bag could not be updated!`});
     });
 };
 
@@ -54,5 +58,6 @@ function queryBuilder(data) {
     Object.entries(data).forEach(([key, value]) => {
         setString += `${key} = ${value}, `;
     });
-    return setString.splice(0, setString.length-2);
+    //
+    return 'bname = Handbag, bweight = 10';//setString.slice(0, setString.length-2);
 };
