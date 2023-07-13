@@ -2,7 +2,7 @@ const db = require('../pgConnect');
 
 exports.checkEmail = async (email) => {
     try {
-        const EmailExists = await db.sql`SELECT uid, password FROM users WHERE email = ${email}`;
+        const EmailExists = await db.sql`SELECT uid, username, password FROM users WHERE email = ${email}`;
         if(EmailExists.length===0)
             return Error('No account with this email exists!');
         else 
@@ -14,7 +14,7 @@ exports.checkEmail = async (email) => {
 
 exports.checkUsername = async (username) => {
     try {
-        const UserNameExists = await db.sql`SELECT uid, password FROM users WHERE username = ${username}`;
+        const UserNameExists = await db.sql`SELECT uid, username, password FROM users WHERE username = ${username}`;
         if(UserNameExists.length===0)
             return Error('No account with this username exists!');
         else

@@ -33,7 +33,7 @@ exports.login = (req, res) => {
 function compareAndEncrypt(password, data, res) {
     bcrypt.compare(password, data.password).then((result) => {
         if (result === true) {
-            const token = jwt.sign({ 'User ID': data.id }, JWTSECRET, { expiresIn: JWTEXPIRY });
+            const token = jwt.sign({ UserId: data.id, UserName: data.username }, JWTSECRET, { expiresIn: JWTEXPIRY });
             res.json({ message: 'login successful', token: token });
         } else {
             res.json({ message: 'Could not log in. Passwords do not match!' });
