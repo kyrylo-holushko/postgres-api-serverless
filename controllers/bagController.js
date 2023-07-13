@@ -18,7 +18,7 @@ exports.createBag = (req, res) => {
         data.bvolume = null;
     if(!data.bweight)
         data.bweight = null;
-    Bag.createBag(data, req.userData).then((result)=>{
+    Bag.createBag(data, req.userData.userID).then((result)=>{
         res.status(201).json({ message: 'New Bag Created', data: result });
     }).catch(e=>{
         res.status(500).json({ message: 'Bag could not be created!' });
@@ -28,7 +28,7 @@ exports.createBag = (req, res) => {
 
 exports.editBag = (req, res) => {
     const queryString = queryBuilder(req.body);
-    Bag.editBag(req.params.id, req.userData, queryString).then((result)=>{
+    Bag.editBag(req.params.id, req.userData.userID, queryString).then((result)=>{
         res.status(200).json({ message: 'Bag has been Updated!', data: result});
     }).catch(e=>{
         res.status(500).json({ message: 'Bag could not be updated!' });
