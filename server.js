@@ -7,11 +7,14 @@ const jwt = require('jsonwebtoken');
 /* Controllers */
 const signupController = require('./controllers/signupController');
 const loginController = require('./controllers/loginController');
+const jwt = require('jsonwebtoken');
 
 dotenv.config();
-const { PORT } = process.env;
+const { PORT, JWTSECRET } = process.env;
 
 app.use(express.json({ limit: '1kb' }));
+
+/* MIDDLEWARE */
 
 const singUpLimiter = rateLimit({
   max: 4, // 4 requests per hour
@@ -20,6 +23,22 @@ const singUpLimiter = rateLimit({
   standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
+
+checkAuth = (req, res, next) => {
+  if(req.method==='OPTIONS')
+    return next();
+  try {
+    const token = req.headers.authorization.split(' ')[1];
+    if(!token) {
+      throw Error('Authentication Failed!');
+    }
+    const decodedToken = jwt.verify(token, JWTSECRET);
+    req.userData = {userID: decodedToken.userID};
+    next();
+  } catch(error){
+    return next(error);
+  }
+};
 
 
 /* ROUTES */
