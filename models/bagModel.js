@@ -21,7 +21,7 @@ exports.createBag = async (data, uid) => {
     }   
 };
 
-exports.editBag = async (bid, uid, query) => {
+exports.editBag = async (bid, uid, data) => {
     try {
         console.log('BAG ID:', bid);
         console.log('USER ID:', uid);
@@ -31,11 +31,18 @@ exports.editBag = async (bid, uid, query) => {
         } else if(BagExists[0].uid!==uid){
             return Error('This is not your bag!');
         } else {
-            console.log('QUERY STRING:', query);
-            const result = await db.sql`UPDATE bags SET ${query} WHERE bid = ${bid}`;
+            let { bid, uid, ...bag } = BagExists[0];
+            console.log('Checking if exsiting',bag.bid);
+            Object.entries(data).forEach(([key,value])=>{
+                bag[key]=value;
+            });
+            console.log('Bag to Be updated', bag);
+            const result = await db.sql`UPDATE bags SET bname=${bag.bname}, bvolume=${bag.bvolume}, bweight=${bag.bweight} WHERE bid = ${bid} RETURNING *`;
             return result[0];
         }
     } catch(error) {
         console.log(error);
     }   
 };
+
+//UPDATE bags SET ${query} WHERE bid = ${bid} RETURNING *

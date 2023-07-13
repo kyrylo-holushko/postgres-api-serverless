@@ -51,7 +51,7 @@ app.post('/api/signup', singUpLimiter, signupController.signup);
 app.post('/api/login', loginController.login);
 app.get('/api/bags', checkAuth, bagController.getBags);
 app.post('/api/bags', checkAuth, bagController.createBag);
-app.patch('/api/bags/:id', checkAuth, bagController.editBag);
+app.put('/api/bags/:id', checkAuth, bagController.editBag);
 
 app.all('*', (req, res) => {
   res.status(404).json({ message: '404 Page Not Found' });

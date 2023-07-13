@@ -27,9 +27,7 @@ exports.createBag = (req, res) => {
 
 
 exports.editBag = (req, res) => {
-    const queryString = queryBuilder(req.body);
-    console.log('Assembled query string:',queryString);
-    Bag.editBag(req.params.id, req.userData.userID, queryString).then((result)=>{
+    Bag.editBag(req.params.id, req.userData.userID, req.body).then((result)=>{
         if(result instanceof Error)
             throw result;
         else
@@ -51,13 +49,4 @@ exports.deleteBag = (req, res) => {
         2. delete the bag with PK bid
     
     */
-};
-
-function queryBuilder(data) {
-    let setString = '';
-    Object.entries(data).forEach(([key, value]) => {
-        setString += `${key} = ${value}, `;
-    });
-    //
-    return 'bname = Handbag, bweight = 10';//setString.slice(0, setString.length-2);
 };
