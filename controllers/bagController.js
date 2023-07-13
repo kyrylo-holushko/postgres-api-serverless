@@ -30,11 +30,30 @@ exports.editBag = (req, res) => {
         else
             res.status(200).json({ message: 'Bag has been Updated!', data: result});
     }).catch(e=>{
-        res.status(500).json({ message: `${e.message} Bag could not be updated!`});
+        res.status(500).json({ message: `${e.message} Bag could not be updated!` });
     });
 };
 
 exports.deleteBag = (req, res) => {
+    Bag.deleteBag(req.params.id, req.userData.userID).then((result)=>{
+        if(result instanceof Error)
+            throw result;
+        else
+            res.status(200).json({ message: 'Bag has been Deleted!', data: result});
+    }).catch(e=>{
+        res.status(500).json({ message: `${e.message} Bag could not be deleted!` });
+    });
+};
+
+function processBagOptionals(data) {
+    if(!data.bvolume)
+        data.bvolume = null;
+    if(!data.bweight)
+        data.bweight = null;
+    return data;
+};
+
+
     // check if bag is empty first
     // ask user if they want to move items to another bag first, change item FK bid to another bag
     // if not tell them it will delete all the contents of the bag
@@ -46,12 +65,3 @@ exports.deleteBag = (req, res) => {
         2. delete the bag with PK bid
     
     */
-};
-
-function processBagOptionals(data) {
-    if(!data.bvolume)
-        data.bvolume = null;
-    if(!data.bweight)
-        data.bweight = null;
-    return data;
-};

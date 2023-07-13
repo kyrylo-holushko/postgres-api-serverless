@@ -36,3 +36,19 @@ exports.editBag = async (bid, uid, data) => {
         console.log(error);
     }   
 };
+
+exports.deleteBag = async (bid, uid) => {
+    try {
+        const BagExists = await db.sql`SELECT * FROM bags WHERE bid = ${bid}`;
+        if(BagExists.length===0){
+            return Error('This bag does not exist.');
+        } else if(BagExists[0].uid!==uid){
+            return Error('This is not your bag!');
+        } else {
+            const result = await db.sql`DELETE FROM bags WHERE bid = ${bid} RETURNING *`;
+            return result[0];
+        }
+    } catch(error) {
+        console.log(error);
+    }
+};
