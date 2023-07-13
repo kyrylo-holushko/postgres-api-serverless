@@ -1,7 +1,7 @@
 const Bag = require('../models/bagModels');
 
 exports.getBags = (req, res) => {
-    Bag.findAllBags(req.params.id).then((result)=>{
+    Bag.findAllBags(req.params.uid).then((result)=>{
         if(result instanceof Error)
             throw result;
         else
@@ -10,8 +10,6 @@ exports.getBags = (req, res) => {
     }).catch(e=>{
         res.status(404).json({ message: e.message });
     });
-    //get all bags associated with user id
-
 };
 
 exports.createBag = (req, res) => {
@@ -20,7 +18,7 @@ exports.createBag = (req, res) => {
         data.bvolume = null;
     if(!data.bweight)
         data.bweight = null;
-    Bag.createBag(data).then((result)=>{
+    Bag.createBag(data, req.userData).then((result)=>{
         res.status(201).json({ message: 'New Bag Created', data: result });
     }).catch(e=>{
         res.status(500).json({ message: 'Bag could not be created!' });
@@ -29,11 +27,12 @@ exports.createBag = (req, res) => {
 
 
 exports.editBag = (req, res) => {
-    //edit bname, for starters
-    //FROM PATCH route
-
-    // [OPTIONAL] edit bvolume and bweight
-
+    const queryString = queryBuilder(req.body);
+    Bag.editBag(req.params.id, req.userData, queryString).then((result)=>{
+        res.status(200).json({ message: 'Bag has been Updated!', data: result});
+    }).catch(e=>{
+        res.status(500).json({ message: 'Bag could not be updated!' });
+    });
 };
 
 exports.deleteBag = (req, res) => {
@@ -48,6 +47,12 @@ exports.deleteBag = (req, res) => {
         2. delete the bag with PK bid
     
     */
+};
 
-
+function queryBuilder(data) {
+    let setString = '';
+    Object.entries(data).forEach(([key, value]) => {
+        setString += `${key} = ${value}, `;
+    });
+    return setString.splice(0, setString.length-2);
 };
