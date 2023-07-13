@@ -13,11 +13,7 @@ exports.getBags = (req, res) => {
 };
 
 exports.createBag = (req, res) => {
-    let { ...data } = req.body;
-    if(!data.bvolume)
-        data.bvolume = null;
-    if(!data.bweight)
-        data.bweight = null;
+    let data = processBagOptionals(req.body);
     Bag.createBag(data, req.userData.userID).then((result)=>{
         res.status(201).json({ message: 'New Bag Created', data: result });
     }).catch(e=>{
@@ -27,7 +23,8 @@ exports.createBag = (req, res) => {
 
 
 exports.editBag = (req, res) => {
-    Bag.editBag(req.params.id, req.userData.userID, req.body).then((result)=>{
+    let data = processBagOptionals(req.body);
+    Bag.editBag(req.params.id, req.userData.userID, data).then((result)=>{
         if(result instanceof Error)
             throw result;
         else
@@ -49,4 +46,12 @@ exports.deleteBag = (req, res) => {
         2. delete the bag with PK bid
     
     */
+};
+
+function processBagOptionals(data) {
+    if(!data.bvolume)
+        data.bvolume = null;
+    if(!data.bweight)
+        data.bweight = null;
+    return data;
 };
