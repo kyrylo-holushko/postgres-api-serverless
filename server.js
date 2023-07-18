@@ -8,6 +8,7 @@ const jwt = require('jsonwebtoken');
 const signupController = require('./controllers/signupController');
 const loginController = require('./controllers/loginController');
 const bagController = require('./controllers/bagController');
+const itemController = require('./controllers/itemController');
 
 dotenv.config();
 const { PORT, JWTSECRET } = process.env;
@@ -55,6 +56,13 @@ app.get('/api/bags', checkAuth, bagController.getBags);
 app.post('/api/bags', checkAuth, bagController.createBag);
 app.put('/api/bags/:id', checkAuth, bagController.editBag);
 app.delete('/api/bags/:id', checkAuth, bagController.deleteBag);
+
+/* ITEM CRUD */
+
+app.get('/api/items', checkAuth, itemController.getItems);
+
+
+
 
 app.all('*', (req, res) => {
   res.status(404).json({ message: '404 Page Not Found' });
