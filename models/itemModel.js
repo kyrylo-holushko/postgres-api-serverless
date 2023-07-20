@@ -4,7 +4,7 @@ exports.findAllItems = async (uid, bid) => {
     try {
         const UserBags = await db.sql`SELECT bid FROM bags WHERE uid = ${uid}`;
         if(UserBags.length===0) {
-            return Error('This bag does not exist.');
+            return Error('User has no bags');
         } else if(UserBags.some(bag=>bag.bid!==bid)) { 
             return Error('This is not your bag!');
         } else {
@@ -23,7 +23,7 @@ exports.createItem = async (uid, bid, data) => {
     try {
         const UserBags = await db.sql`SELECT bid FROM bags WHERE uid = ${uid}`;
         if(UserBags.length===0) {
-            return Error('This bag does not exist.');
+            return Error('User has no bags!');
         } else if(!UserBags.some(bag=>bag.bid==bid)) { 
             return Error('This is not your bag!');
         } else {
@@ -37,28 +37,32 @@ exports.createItem = async (uid, bid, data) => {
 
 exports.editItem = async (iid, uid, data) => {
     try {
-
-
+        const UserItems = await db.sql`SELECT items.iid FROM items INNER JOIN bags ON items.bid = bags.bid WHERE bags.uid = ${uid}`;
+        if(UserItems.length===0) {
+            return Error('User has no bags!');
+        } else if(!UserItems.some(item=>item.iid==iid)) {
+            return Error('This is not your item!');
+        } else {
+            const result = await db.sql`UPDATE items SET iname=${data.iname}, idesc=${data.idesc}, image=${data.image}, ivolume=${data.ivolume}, iweight=${data.iweight}, priority=${data.priority} WHERE iid = ${iid} RETURNING *`;
+            return result[0];
+        }
     } catch(error) {
         console.log(error);
     }  
 };
 
 exports.deleteItem = async (iid, uid) => {
-
-
+    try {
+        const UserItems = await db.sql`SELECT items.iid FROM items INNER JOIN bags ON items.bid = bags.bid WHERE bags.uid = ${uid}`;
+        if(UserItems.length===0) {
+            return Error('User has no bags!');
+        } else if(!UserItems.some(item=>item.iid==iid)) {
+            return Error('This is not your item!');
+        } else {
+            const result = await db.sql`DELETE FROM items WHERE iid = ${iid} RETURNING *`;
+            return result[0];
+        }
+    } catch(error) {
+        console.log(error);
+    }  
 };
-
-/* try {
-    const BagExists = await db.sql`SELECT * FROM bags WHERE bid = ${bid}`;
-    if(BagExists.length===0){
-        return Error('This bag does not exist.');
-    } else if(BagExists[0].uid!==uid){
-        return Error('This is not your bag!');
-    } else {
-        const result = await db.sql`UPDATE bags SET bname=${data.bname}, bvolume=${data.bvolume}, bweight=${data.bweight} WHERE bid = ${bid} RETURNING *`;
-        return result[0];
-    }
-} catch(error) {
-    console.log(error);
-}    */

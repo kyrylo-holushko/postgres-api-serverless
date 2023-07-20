@@ -52,6 +52,7 @@ app.post('/api/signup', singUpLimiter, signupController.signup);
 app.post('/api/login', loginController.login);
 
 /* BAG CRUD */
+
 app.get('/api/bags', checkAuth, bagController.getBags);
 app.post('/api/bags', checkAuth, bagController.createBag);
 app.put('/api/bags/:id', checkAuth, bagController.editBag);
@@ -60,8 +61,9 @@ app.delete('/api/bags/:id', checkAuth, bagController.deleteBag);
 /* ITEM CRUD */
 
 app.get('/api/items', checkAuth, itemController.getItems);
-
-
+app.post('/api/items', checkAuth, itemController.createItem);
+app.put('/api/items/:id', checkAuth, itemController.editItem);
+app.delete('/api/items/:id', checkAuth, itemController.deleteItem);
 
 
 app.all('*', (req, res) => {

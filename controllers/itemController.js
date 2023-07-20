@@ -13,7 +13,7 @@ exports.getItems = (req, res) => {
 
 exports.createItem = (req, res) => {
     let data = processItemOptionals(req.body);
-    Item.createItem(req.userData.userID, bid, data).then((result)=>{
+    Item.createItem(req.userData.userID, req.body.bid, data).then((result)=>{
         res.status(201).json({ message: 'New Item Created', data: result });
     }).catch(e=>{
         res.status(500).json({ message: 'Item could not be created!' });
@@ -22,19 +22,25 @@ exports.createItem = (req, res) => {
 
 exports.editItem = (req, res) => {
     let data = processItemOptionals(req.body);
-    /* let data = processBagOptionals(req.body);
-    Bag.editBag(req.params.id, req.userData.userID, data).then((result)=>{
+    Item.editItem(req.params.id, req.userData.userID, data).then((result)=>{
         if(result instanceof Error)
             throw result;
         else
-            res.status(200).json({ message: 'Bag has been Updated!', data: result});
+            res.status(200).json({ message: 'Item has been Updated!', data: result});
     }).catch(e=>{
-        res.status(500).json({ message: `${e.message} Bag could not be updated!` });
-    }); */
+        res.status(500).json({ message: `${e.message} Item could not be updated!` });
+    });
 };
 
 exports.deleteItem = (req, res) => {
-
+    Item.deleteItem(req.params.id, req.userData.userID).then((result)=>{
+        if(result instanceof Error)
+            throw result;
+        else
+            res.status(200).json({ message: 'Item has been Deleted!', data: result});
+    }).catch(e=>{
+        res.status(500).json({ message: `${e.message} Item could not be deleted!` });
+    });
 };
 
 function processItemOptionals(data) {
