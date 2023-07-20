@@ -9,7 +9,7 @@ exports.findAllItems = async (uid, bid) => {
             return Error('This is not your bag!');
         } else {
             const hasAnyItems = await db.sql`SELECT iid, iname, idesc FROM items WHERE bid = ${bid}`;
-            if(hasAnyBags.length===0)
+            if(hasAnyItems.length===0)
                 return Error('You do not have any items in this bag.');
             else
                 return hasAnyItems;
@@ -19,9 +19,20 @@ exports.findAllItems = async (uid, bid) => {
     }
 };
 
-exports.createItem = async (data, bid) => {
-
-
+exports.createItem = async (uid, bid, data) => {
+    try {
+        const UserBags = await db.sql`SELECT bid FROM bags WHERE uid = ${uid}`;
+        if(UserBags.length===0) {
+            return Error('This bag does not exist.');
+        } else if(UserBags.some(bag=>bag.bid!==bid)) { 
+            return Error('This is not your bag!');
+        } else {
+            const result = await db.sql`INSERT INTO items (iname, idesc, image, ivolume, iweight, priority, bid) VALUES (${data.iname}, ${data.idesc}, ${data.image}, ${data.ivolume}, ${data.iweight}, ${data.priority}, ${bid}) RETURNING *`;
+            return result[0];
+        } 
+    } catch(error) {
+        console.log(error);
+    }
 };
 
 exports.editItem = async (iid, uid, data) => {

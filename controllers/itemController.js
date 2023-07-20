@@ -13,13 +13,11 @@ exports.getItems = (req, res) => {
 
 exports.createItem = (req, res) => {
     let data = processItemOptionals(req.body);
-
-    /* let data = processBagOptionals(req.body);
-    Bag.createBag(data, req.userData.userID).then((result)=>{
-        res.status(201).json({ message: 'New Bag Created', data: result });
+    Item.createItem(req.userData.userID, bid, data).then((result)=>{
+        res.status(201).json({ message: 'New Item Created', data: result });
     }).catch(e=>{
-        res.status(500).json({ message: 'Bag could not be created!' });
-    }); */
+        res.status(500).json({ message: 'Item could not be created!' });
+    });
 };
 
 exports.editItem = (req, res) => {
