@@ -21,7 +21,16 @@ exports.createItem = (req, res) => {
 };
 
 exports.editItem = (req, res) => {
-
+    let data = processItemOptionals(req.body);
+    /* let data = processBagOptionals(req.body);
+    Bag.editBag(req.params.id, req.userData.userID, data).then((result)=>{
+        if(result instanceof Error)
+            throw result;
+        else
+            res.status(200).json({ message: 'Bag has been Updated!', data: result});
+    }).catch(e=>{
+        res.status(500).json({ message: `${e.message} Bag could not be updated!` });
+    }); */
 };
 
 exports.deleteItem = (req, res) => {
