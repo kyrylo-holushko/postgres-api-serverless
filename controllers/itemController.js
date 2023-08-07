@@ -14,9 +14,12 @@ exports.getItems = (req, res) => {
 exports.createItem = (req, res) => {
     let data = processItemOptionals(req.body);
     Item.createItem(req.userData.userID, req.body.bid, data).then((result)=>{
-        res.status(201).json({ message: 'New Item Created', data: result });
+        if(result instanceof Error)
+            throw result;
+        else
+            res.status(201).json({ message: 'New Item Created', data: result });
     }).catch(e=>{
-        res.status(500).json({ message: 'Item could not be created!' });
+        res.status(500).json({ message: `${e.message} Item could not be created!` });
     });
 };
 
