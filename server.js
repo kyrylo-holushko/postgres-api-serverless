@@ -5,8 +5,8 @@ const rateLimit = require('express-rate-limit');
 const jwt = require('jsonwebtoken');
 
 /* Controllers */
-const signupController = require('./controllers/signupController');
-const loginController = require('./controllers/loginController');
+
+const userController = require('./controllers/userController');
 const bagController = require('./controllers/bagController');
 const itemController = require('./controllers/itemController');
 
@@ -48,8 +48,8 @@ app.get('/', (req, res) => {
   res.json({ message: 'root'});
 });
 
-app.post('/api/signup', singUpLimiter, signupController.signup);
-app.post('/api/login', loginController.login);
+app.post('/api/signup', singUpLimiter, userController.signup);
+app.post('/api/login', userController.login);
 
 /* BAG CRUD */
 
