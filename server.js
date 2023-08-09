@@ -68,6 +68,9 @@ app.post('/api/items', checkAuth, itemController.createItem);
 app.put('/api/items/:id', checkAuth, itemController.editItem);
 app.delete('/api/items/:id', checkAuth, itemController.deleteItem);
 
+app.put('/api/move/items', checkAuth);
+app.put('/api/move/item/:id', checkAuth);
+
 
 app.all('*', (req, res) => {
   res.status(404).json({ message: '404 Page Not Found' });

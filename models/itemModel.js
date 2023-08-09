@@ -39,7 +39,7 @@ exports.editItem = async (iid, uid, data) => {
     try {
         const UserItems = await db.sql`SELECT items.iid FROM items INNER JOIN bags ON items.bid = bags.bid WHERE bags.uid = ${uid}`;
         if(UserItems.length===0) {
-            return Error('User has no bags!');
+            return Error('User has no items!');
         } else if(!UserItems.some(item=>item.iid==iid)) {
             return Error('This is not your item!');
         } else {
