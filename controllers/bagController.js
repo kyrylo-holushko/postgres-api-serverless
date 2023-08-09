@@ -5,7 +5,6 @@ exports.getBags = (req, res) => {
         if(result instanceof Error)
             throw result;
         else
-            console.log('Returned Result', result);
             res.status(200).json({ data: result });
     }).catch(e=>{
         res.status(404).json({ message: e.message });
@@ -54,7 +53,9 @@ function processBagOptionals(data) {
 };
 
 
-    // check if bag is empty first
+    // check if bag is empty first, then delete
+    // otherewise:
+    
     // ask user if they want to move items to another bag first, change item FK bid to another bag
     // if not tell them it will delete all the contents of the bag
     /*
