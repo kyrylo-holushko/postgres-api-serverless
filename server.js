@@ -41,15 +41,18 @@ checkAuth = (req, res, next) => {
   }
 };
 
-
 /* ROUTES */
 
 app.get('/', (req, res) => {
   res.json({ message: 'root'});
 });
 
-app.post('/api/signup', singUpLimiter, userController.signup);
-app.post('/api/login', userController.login);
+/* USER CRUD */
+
+app.post('/api/user/signup', singUpLimiter, userController.signup);
+app.post('/api/user/login', userController.login);
+app.put('/api/user/update',  checkAuth, userController.updateUser);
+app.delete('/api/user/delete', checkAuth, userController.deleteUser);
 
 /* BAG CRUD */
 
