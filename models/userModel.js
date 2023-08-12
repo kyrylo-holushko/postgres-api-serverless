@@ -48,8 +48,6 @@ exports.updateUser = async (uid, data) => {
 
 exports.deleteUser = async (uid) => {
     try {
-        //delete all items Use Join
-        //delete all bags with uid
         const result = await db.sql`DELETE FROM users WHERE uid = ${uid} RETURNING *`; //delete user with uid
         return result[0];
     } catch(error) {
