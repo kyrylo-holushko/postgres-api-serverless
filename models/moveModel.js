@@ -10,8 +10,15 @@ exports.moveAllItems = async (uid, data) => {
         } else if(BagExists[0].uid!==uid){
             return Error('This is not your bag!');
         } else {
-            const results = await db.sql`UPDATE items SET bid=${data.nbid} WHERE bid = ${data.obid} RETURNING *`;
-            return results;
+            const BagExists = await db.sql`SELECT * FROM bags WHERE bid = ${data.nbid}`;
+            if(BagExists.length===0){
+                return Error('This bag does not exist.');
+            } else if(BagExists[0].uid!==uid){
+                return Error('This is not your bag!');
+            } else {
+                const results = await db.sql`UPDATE items SET bid=${data.nbid} WHERE bid = ${data.obid} RETURNING *`;
+                return results;
+            }      
         }
     } catch(error) {
         console.log(error);

@@ -12,7 +12,7 @@ exports.moveAllItems = (req, res) => {
 };
 
 exports.moveOneItem = (req, res) => {
-    Move.moveOneItem(req.userData.userID, req.nbid, req.params.id).then((result)=>{
+    Move.moveOneItem(req.userData.userID, req.body.nbid, req.params.id).then((result)=>{
         if(result instanceof Error)
             throw result;  
         else

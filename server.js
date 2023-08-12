@@ -9,6 +9,7 @@ const jwt = require('jsonwebtoken');
 const userController = require('./controllers/userController');
 const bagController = require('./controllers/bagController');
 const itemController = require('./controllers/itemController');
+const moveController = require('./controllers/moveController');
 
 dotenv.config();
 const { PORT, JWTSECRET } = process.env;
@@ -68,8 +69,8 @@ app.post('/api/items', checkAuth, itemController.createItem);
 app.put('/api/items/:id', checkAuth, itemController.editItem);
 app.delete('/api/items/:id', checkAuth, itemController.deleteItem);
 
-app.put('/api/move/items', checkAuth);
-app.put('/api/move/item/:id', checkAuth);
+app.put('/api/move/items', checkAuth, moveController.moveAllItems);
+app.put('/api/move/item/:id', checkAuth, moveController.moveOneItem);
 
 
 app.all('*', (req, res) => {
