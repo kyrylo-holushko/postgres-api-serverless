@@ -13,15 +13,17 @@ exports.signup = (req, res) => {
     else if(!email.validate(req.body.email))
         res.status(500).json({ message: "Email entered is not a valid email!"});
     else if(req.body.password!==req.body.passwordConfirmed)
-        res.status(500).json({ message: "Passwords don't match, Account not created!"}) 
+        res.status(500).json({ message: "Passwords don't match, Account not created!"}); 
     else {
         let { passwordConfirmed, ...data } = req.body;
-        bcrypt.hash(data.password, 10).then(hash=>{data.password = hash;}).catch(e=>{console.log('Encryption Failed.')});
-        User.createUser(data).then((result)=>{
-            if(result instanceof Error)
-                throw result;
-            else
-                res.status(201).json({ message: 'New User Created', data: result});
+        bcrypt.hash(data.password, 10).then(hash=>{
+            data.password = hash;
+            User.createUser(data).then((result)=>{
+                if(result instanceof Error)
+                    throw result;
+                else
+                    res.status(201).json({ message: 'New User Created', data: result});
+            }).catch(e=>{console.log('Encryption Failed.')});
         }).catch(e=>{
             res.status(500).json({ message: e.message });
         });
@@ -72,15 +74,17 @@ exports.updateUser = (req, res) => {
     else if(!email.validate(req.body.email))
         res.status(500).json({ message: "Email entered is not a valid email!"});
     else if(req.body.password!==req.body.passwordConfirmed)
-        res.status(500).json({ message: "Passwords don't match, Account not created!"}) 
+        res.status(500).json({ message: "Passwords don't match, Account not updated!"}); 
     else {
         let { passwordConfirmed, ...data } = req.body;
-        bcrypt.hash(data.password, 10).then(hash=>{data.password = hash;}).catch(e=>{console.log('Encryption Failed.')});
-        User.updateUser(req.userData.userID, data).then((result)=>{
-            if(result instanceof Error)
-                throw result;
-            else
-                res.status(201).json({ message: 'User has been updated!', data: result});
+        bcrypt.hash(data.password, 10).then(hash=>{
+            data.password = hash;
+            User.updateUser(req.userData.userID, data).then((result)=>{
+                if(result instanceof Error)
+                    throw result;
+                else
+                    res.status(201).json({ message: 'User has been updated!', data: result});
+            }).catch(e=>{console.log('Encryption Failed.')});    
         }).catch(e=>{
             res.status(500).json({ message: e.message });
         });

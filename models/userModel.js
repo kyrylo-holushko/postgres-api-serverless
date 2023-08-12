@@ -39,6 +39,10 @@ exports.checkUsername = async (username) => {
 
 exports.updateUser = async (uid, data) => {
     try {
+        const UserExists = await db.sql`SELECT * FROM users WHERE email = ${data.email}`;
+        if(UserExists.length>0){
+            return Error('An account with this email already exists!');
+        }
         const result = await db.sql`UPDATE users SET username=${data.username}, email=${data.email}, password=${data.password} WHERE uid = ${uid} RETURNING *`;
         return result[0];
     } catch(error) {
