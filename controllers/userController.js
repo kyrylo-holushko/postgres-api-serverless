@@ -60,9 +60,9 @@ function compareAndEncrypt(password, data, res) {
         if (result === true) {
             const payload = { uid: data.uid, username: data.username };
             const token = jwt.sign(payload, JWTSECRET, { expiresIn: JWTEXPIRY });
-            res.json({ message: 'login successful', token: token });
+            res.status(200).json({ message: 'Login successful', token: token });
         } else {
-            res.json({ message: 'Could not log in. Passwords do not match!' });
+            res.status(500).json({ message: 'Could not log in. Passwords do not match!' });
         }
     });  
 };
