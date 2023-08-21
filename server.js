@@ -3,6 +3,7 @@ const app = express();
 const dotenv = require('dotenv');
 const rateLimit = require('express-rate-limit');
 const jwt = require('jsonwebtoken');
+const cors = require("cors");
 
 /* Controllers */
 
@@ -14,6 +15,7 @@ const moveController = require('./controllers/moveController');
 dotenv.config();
 const { PORT, JWTSECRET } = process.env;
 
+app.use(cors());
 app.use(express.json({ limit: '1kb' }));
 
 /* MIDDLEWARE */
