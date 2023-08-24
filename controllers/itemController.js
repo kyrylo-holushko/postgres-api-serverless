@@ -1,7 +1,7 @@
 const Item = require('../models/itemModel');
 
 exports.getItems = (req, res) => {
-    Item.findAllItems(req.userData.userID, req.body.bid).then((result)=>{
+    Item.findAllItems(req.userData.userID, req.query.bag).then((result)=>{
     if(result instanceof Error)
         throw result;
     else
