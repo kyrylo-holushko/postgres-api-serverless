@@ -8,7 +8,7 @@ exports.findAllItems = async (uid, bid) => {
         } else if(!UserBags.some(bag=>bag.bid==bid)) { 
             return Error('This is not your bag!');
         } else {
-            const hasAnyItems = await db.sql`SELECT iid, iname, idesc FROM items WHERE bid = ${bid}`;
+            const hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid}`;
             if(hasAnyItems.length===0)
                 return Error('You do not have any items in this bag.');
             else
