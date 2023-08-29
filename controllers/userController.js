@@ -77,7 +77,7 @@ exports.updateUser = (req, res) => {
     else if(!email.validate(req.body.email))
         res.status(500).json({ message: "Email entered is not a valid email!"});
     else {
-        User.updateUser(req.userData.userID, req.body).then((result)=>{
+        User.updateUser(req.userData.userID, req.userData.email, req.body).then((result)=>{
             if(result instanceof Error){
                 throw result;
             } else {

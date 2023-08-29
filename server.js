@@ -37,7 +37,7 @@ checkAuth = (req, res, next) => {
         throw Error('Authentication Failed!');
         }
         const decodedToken = jwt.verify(token, JWTSECRET);
-        req.userData = {userID: decodedToken.uid};
+        req.userData = {userID: decodedToken.uid, userEmail: decodedToken.email};
         next();
     } catch(error){
         return next(error);

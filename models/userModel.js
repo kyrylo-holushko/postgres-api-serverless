@@ -37,9 +37,9 @@ exports.checkUsername = async (username) => {
     }
 };
 
-exports.updateUser = async (uid, data) => {
+exports.updateUser = async (uid, oldmail, data) => {
     try {
-        const UserExists = await db.sql`SELECT * FROM users WHERE email = ${data.email}`;
+        const UserExists = await db.sql`SELECT * FROM users WHERE email = ${data.email} AND email != ${oldmail}`;
         if(UserExists.length>0){
             return Error('An account with this email already exists!');
         }
