@@ -2,9 +2,10 @@ const User = require('../models/userModel');
 const email = require("email-validator");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const nodeoutlook = require('nodejs-nodemailer-outlook');
 const dotenv = require('dotenv');
 dotenv.config();
-const { JWTSECRET, JWTEXPIRY } = process.env;
+const { JWTSECRET, JWTEXPIRY, MAILPASSWORD } = process.env;
 
 exports.signup = (req, res) => {
     const usernameRegEx = RegExp(/^[a-zA-Z0-9]{1,15}$/);
@@ -22,12 +23,28 @@ exports.signup = (req, res) => {
                 if(result instanceof Error)
                     throw result;
                 else
+                    sendConfirmation(result);
                     res.status(201).json({ message: 'New User Created', data: result});
             }).catch(e=>{console.log('Encryption Failed.')});
         }).catch(e=>{
             res.status(500).json({ message: e.message });
         });
     }
+};
+
+async function sendConfirmation(data) {
+    await nodeoutlook.sendEmail({
+        auth: {
+            user: "demo-no-reply@outlook.com",
+            pass: `${MAILPASSWORD}`
+        },
+        from: 'demo-no-reply@outlook.com',
+        to: `${data.email}`,
+        subject: 'Account Creation Confirmation',
+        text: `Hello ${data.username}, your account has been successfully created!`,
+        onError: (e) => console.log(e),
+        onSuccess: (i) => console.log(i)
+    });
 };
 
 exports.login = (req, res) => {
