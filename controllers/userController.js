@@ -132,3 +132,47 @@ exports.deleteUser = (req, res) => {
 
 /* const payload = { uid: data.uid, username: data.username, email: data.email };
             const token = jwt.sign(payload, JWTSECRET, { expiresIn: JWTEXPIRY }); */
+
+exports.passwordLink = (req, res) => {
+    if(!email.validate(req.body.email)) {
+        res.status(500).json({ message: "Email entered is not a valid email!"});
+    } else {
+        User.checkEmail(req.body.email).then((result) => {
+            if(result instanceof Error)
+                throw result;
+            else
+                sendPasswordReset(result);
+        }).catch(e=>{
+            res.status(500).json({ message: e.message });
+        });
+    }
+};
+
+async function sendPasswordReset(result) {
+    //const link = `${clientURL}/passwordReset?token=${resetToken}&id=${user._id}`;
+
+    //generate token first then(()=>{nodeoutloo.sendEmail.... below}) 
+
+    await nodeoutlook.sendEmail({
+        auth: {
+            user: "demo-no-reply@outlook.com",
+            pass: `${MAILPASSWORD}`
+        },
+        from: 'demo-no-reply@outlook.com',
+        to: `${data.email}`,
+        subject: 'Password Reset',
+        html: `<p>Hello ${data.username}. Please click this link to reset your password:<br/><br/><a href="${link}">Reset Password</a></p>`,
+        text: `Hello ${data.username}, your account has been successfully created!`,
+        onError: (e) => console.log(e),
+        onSuccess: (i) => console.log(i)
+    });
+
+
+};
+
+exports.passwordNew = (req, res) => {
+
+
+
+
+};

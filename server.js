@@ -57,6 +57,9 @@ app.post('/api/user/login', userController.login);
 app.put('/api/user/update',  checkAuth, userController.updateUser);
 app.delete('/api/user/delete', checkAuth, userController.deleteUser);
 
+app.post('/api/user/password/link', userController.passwordLink);
+app.post('/api/user/password/new', userController.passwordNew);
+
 /* BAG CRUD */
 
 app.get('/api/bags', checkAuth, bagController.getBags);
