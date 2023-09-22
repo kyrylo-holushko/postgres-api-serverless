@@ -149,11 +149,9 @@ exports.passwordLink = (req, res) => {
 };
 
 async function sendPasswordReset(data) {
-    //const link = `${clientURL}/passwordReset?token=${resetToken}&id=${user._id}`;
-
-    //generate token first then(()=>{nodeoutloo.sendEmail.... below}) 
-
+ 
     const resetToken = signToken(data.uid, data.username, data.email);
+    // store token in reset_password_token column in user table in postgres
     const link = `http://localhost:3000/passswordReset?token=${resetToken}&id=${data.uid}`;
 
     await nodeoutlook.sendEmail({
