@@ -85,7 +85,7 @@ function compareAndEncrypt(password, data, res) {
 
 function signToken(uid, username, email){
     return jwt.sign({ uid, username, email }, JWTSECRET, { expiresIn: JWTEXPIRY });
-}
+};
 
 exports.updateUser = (req, res) => {
     const usernameRegEx = RegExp(/^[a-zA-Z0-9]{1,15}$/);
@@ -148,10 +148,13 @@ exports.passwordLink = (req, res) => {
     }
 };
 
-async function sendPasswordReset(result) {
+async function sendPasswordReset(data) {
     //const link = `${clientURL}/passwordReset?token=${resetToken}&id=${user._id}`;
 
     //generate token first then(()=>{nodeoutloo.sendEmail.... below}) 
+
+    const resetToken = signToken(data.uid, data.username, data.email);
+    const link = `http://localhost:3000/passswordReset?token=${resetToken}&id=${data.uid}`;
 
     await nodeoutlook.sendEmail({
         auth: {
@@ -162,7 +165,6 @@ async function sendPasswordReset(result) {
         to: `${data.email}`,
         subject: 'Password Reset',
         html: `<p>Hello ${data.username}. Please click this link to reset your password:<br/><br/><a href="${link}">Reset Password</a></p>`,
-        text: `Hello ${data.username}, your account has been successfully created!`,
         onError: (e) => console.log(e),
         onSuccess: (i) => console.log(i)
     });
