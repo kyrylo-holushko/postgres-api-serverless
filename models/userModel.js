@@ -58,3 +58,12 @@ exports.deleteUser = async (uid) => {
         console.log(error);
     }
 };
+
+exports.storeResetToken = async (email, token) => {
+    try {
+        const result = await db.sql`UPDATE users SET reset_password_token=${token} WHERE email = ${email} RETURNING *`;
+        return result[0];
+    } catch(error) {
+        console.log(error);
+    }
+};
