@@ -28,6 +28,14 @@ const singUpLimiter = rateLimit({
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
 
+const passwordResetLimiter = rateLimit({
+    max: 3, // 3 requests per 24 hours
+    windowMs: 24 * 60 * (60000), //24 hour limit
+    message: 'Too many password resets, please check your email for your latest reset link',
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+
 checkAuth = (req, res, next) => {
     if(req.method==='OPTIONS')
         return next();
@@ -57,7 +65,7 @@ app.post('/api/user/login', userController.login);
 app.put('/api/user/update',  checkAuth, userController.updateUser);
 app.delete('/api/user/delete', checkAuth, userController.deleteUser);
 
-app.post('/api/user/password/link', userController.passwordLink);
+app.post('/api/user/password/link', /*passwordResetLimiter*/userController.passwordLink);
 app.post('/api/user/password/new', checkAuth, userController.passwordNew);
 
 /* BAG CRUD */
