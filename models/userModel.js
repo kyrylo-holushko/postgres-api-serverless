@@ -65,5 +65,16 @@ exports.storeResetToken = async (email, token) => {
         return result[0];
     } catch(error) {
         console.log(error);
+        throw error;
+    }
+};
+
+exports.setNewPassword = async (password, token) => {
+    try {
+        const result = await db.sql`UPDATE users SET password=${password}, reset_password_token=${null} WHERE reset_password_token = ${token} RETURNING *`;
+        return result[0];
+    } catch(error) {
+        console.log(error);
+        throw error;
     }
 };

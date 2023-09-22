@@ -179,8 +179,19 @@ async function sendPasswordReset(data, email) {
 };
 
 exports.passwordNew = (req, res) => {
+    const resetToken = req.headers.authorization.split(' ')[1];
+    if(req.body.password!==req.body.passwordConfirmed)
+        res.status(500).json({ message: "Passwords don't match, Account not created!"}); 
+    else {
+        bcrypt.hash(req.body.password, 10).then(hash=>{
 
+            User.setNewPassword(hash, resetToken).then(()=>{
+                res.status(200).json({ message: "Password has been reset." });
+            }).catch(e=>{throw e});
+            
+        }).catch(e=>{
+            res.status(500).json({ message: e.message });
+        });
 
-
-
+    }
 };
