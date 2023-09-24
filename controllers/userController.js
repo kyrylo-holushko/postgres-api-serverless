@@ -141,7 +141,9 @@ exports.passwordLink = (req, res) => {
             if(result instanceof Error)
                 throw result;
             else
-                sendPasswordReset(result, req.body.email);
+                sendPasswordReset(result, req.body.email).then(()=>{
+                    res.status(200).json({ message: "Password reset link sent, please check your email."});
+                }).catch(e=>{throw e});
         }).catch(e=>{
             res.status(500).json({ message: e.message });
         });
