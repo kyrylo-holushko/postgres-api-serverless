@@ -66,7 +66,7 @@ app.put('/api/user/update',  checkAuth, userController.updateUser);
 app.delete('/api/user/delete', checkAuth, userController.deleteUser);
 
 app.post('/api/user/password/link', /*passwordResetLimiter*/userController.passwordLink);
-app.post('/api/user/password/new', checkAuth, userController.passwordNew);
+app.put('/api/user/password/new', checkAuth, userController.passwordNew);
 
 /* BAG CRUD */
 
