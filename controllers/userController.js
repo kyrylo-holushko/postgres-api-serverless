@@ -152,32 +152,29 @@ exports.passwordLink = (req, res) => {
 
 async function sendPasswordReset(data, email) {
  
-    //const resetToken = signToken(data.uid, data.username, data.email);
-    signToken(data.uid, data.username, data.email).then((resetToken)=>{
-
-        User.resetToken(email, resetToken).then(()=>{
-
-            const link = `http://localhost:3000/passswordReset?token=${resetToken}&id=${data.uid}`;
+    const resetToken = signToken(data.uid, data.username, data.email);
     
-            nodeoutlook.sendEmail({
-                auth: {
-                    user: "demo-no-reply@outlook.com",
-                    pass: `${MAILPASSWORD}`
-                },
-                from: 'demo-no-reply@outlook.com',
-                to: `${data.email}`,
-                subject: 'Password Reset',
-                html: `<p>Hello ${data.username}. Please click this link to reset your password:<br/><br/><a href="${link}">Reset Password</a></p>`,
-                onError: (e) => console.log(e),
-                onSuccess: (i) => console.log(i)
-            });
+    User.resetToken(email, resetToken).then(()=>{
 
-        }).catch(e=>{
-            throw e;
+        const link = `http://localhost:3000/passswordReset?token=${resetToken}&id=${data.uid}`;
+
+        nodeoutlook.sendEmail({
+            auth: {
+                user: "demo-no-reply@outlook.com",
+                pass: `${MAILPASSWORD}`
+            },
+            from: 'demo-no-reply@outlook.com',
+            to: `${data.email}`,
+            subject: 'Password Reset',
+            html: `<p>Hello ${data.username}. Please click this link to reset your password:<br/><br/><a href="${link}">Reset Password</a></p>`,
+            onError: (e) => console.log(e),
+            onSuccess: (i) => console.log(i)
         });
+
     }).catch(e=>{
         throw e;
     });
+    
 };
 
 exports.passwordNew = (req, res) => {
