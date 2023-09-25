@@ -155,8 +155,8 @@ async function sendPasswordReset(data, email) {
     const resetToken = signToken(data.uid, data.username, data.email);
     
     User.storeResetToken(email, resetToken).then(()=>{
-        //const link = `http://localhost:3000/passswordReset?token=${resetToken}&id=${data.uid}`;
-        const link = `http://localhost:3000/passswordReset?token=${resetToken}`;
+        
+        const link = `http://localhost:3000/passwordReset?token=${resetToken}`;
 
         nodeoutlook.sendEmail({
             auth: {
