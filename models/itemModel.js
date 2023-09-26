@@ -1,16 +1,16 @@
 const db = require('../pgConnect');
 
 exports.findItems = async (uid, bid, page, perPage) => {
-    try {
-        const limit = perPage * 2;
-        const offset = (limit * page) - limit;
-        const UserBags = await db.sql`SELECT bid FROM bags WHERE uid = ${uid} LIMIT ${limit} OFFSET ${offset}`;
+    try {    
+        const UserBags = await db.sql`SELECT bid FROM bags WHERE uid = ${uid}`;
         if(UserBags.length===0) {
             return Error('User has no bags');
         } else if(!UserBags.some(bag=>bag.bid==bid)) { 
             return Error('This is not your bag!');
         } else {
-            const hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid}`;
+            const limit = perPage * 2;
+            const offset = (limit * page) - limit;
+            const hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} LIMIT ${limit} OFFSET ${offset}`;
             if(hasAnyItems.length===0)
                 return Error('You do not have any items in this bag.');
             else
