@@ -9,7 +9,7 @@ exports.findItems = async (uid, bid, page, perPage) => {
             return Error('This is not your bag!');
         } else {
             const limit = perPage * 2;
-            const offset = (limit * page) - limit;
+            const offset = (perPage * page) - (limit - perPage);
             const hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} LIMIT ${limit} OFFSET ${offset}`;
             if(hasAnyItems.length===0)
                 return Error('You do not have any items in this bag.');
