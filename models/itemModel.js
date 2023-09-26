@@ -1,6 +1,6 @@
 const db = require('../pgConnect');
 
-exports.findAllItems = async (uid, bid) => {
+exports.findItems = async (uid, bid, page, perPage) => {
     try {
         const UserBags = await db.sql`SELECT bid FROM bags WHERE uid = ${uid}`;
         if(UserBags.length===0) {
