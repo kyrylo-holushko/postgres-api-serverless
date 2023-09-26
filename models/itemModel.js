@@ -2,7 +2,7 @@ const db = require('../pgConnect');
 
 exports.findItems = async (uid, bid, page, perPage) => {
     try {
-        const limit = perPage;
+        const limit = perPage + 1;
         const offset = (limit * page) - limit;
         const UserBags = await db.sql`SELECT bid FROM bags WHERE uid = ${uid} LIMIT ${limit} OFFSET ${offset}`;
         if(UserBags.length===0) {
