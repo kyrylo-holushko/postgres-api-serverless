@@ -1,6 +1,6 @@
 const db = require('../pgConnect');
 
-exports.findItems = async (uid, bid, page, perPage) => {
+exports.findItems = async (uid, bid, page, perPage, search, filterPriority) => {
     try {    
         const UserBags = await db.sql`SELECT bid FROM bags WHERE uid = ${uid}`;
         if(UserBags.length===0) {
@@ -10,7 +10,16 @@ exports.findItems = async (uid, bid, page, perPage) => {
         } else {
             const limit = perPage * 2;
             const offset = (perPage * page) - (limit - perPage);
-            const hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} LIMIT ${limit} OFFSET ${offset}`;
+
+            if(search.length && filterPriority!=0){
+                const hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND (LOWER(iname) LIKE LOWER('%${search}%') OR LOWER(idesc) LIKE LOWER('%${search}%')) AND priority = ${filterPriority} LIMIT ${limit} OFFSET ${offset}`;
+            } else if(search.length) {
+                const hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND (LOWER(iname) LIKE LOWER('%${search}%') OR LOWER(idesc) LIKE LOWER('%${search}%')) LIMIT ${limit} OFFSET ${offset}`;
+            } else if(filterPriority!=0) {
+                const hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND priority = ${filterPriority} LIMIT ${limit} OFFSET ${offset}`;
+            } else {
+                const hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} LIMIT ${limit} OFFSET ${offset}`;
+            }
             if(hasAnyItems.length===0)
                 return Error('You do not have any items in this bag.');
             else
