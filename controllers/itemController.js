@@ -1,7 +1,14 @@
 const Item = require('../models/itemModel');
 
 exports.getItems = (req, res) => {
-    Item.findItems(req.userData.userID, req.query.bag, req.query.page, req.query.perPage).then((result)=>{
+    Item.findItems(
+        req.userData.userID, 
+        req.query.bag, 
+        req.query.page, 
+        req.query.perPage, 
+        req.query.search, 
+        req.query.filterPriority
+        ).then((result)=>{
     if(result instanceof Error)
         throw result;
     else
