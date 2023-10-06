@@ -8,17 +8,21 @@ exports.findItems = async (uid, bid, page, perPage, search, filterPriority) => {
         } else if(!UserBags.some(bag=>bag.bid==bid)) { 
             return Error('This is not your bag!');
         } else {
+            //const string = search.toString()
             const limit = perPage * 2;
             const offset = (perPage * page) - (limit - perPage);
-
-            if(search.length && filterPriority!=0){
-                const hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND (LOWER(iname) LIKE LOWER('%${search}%') OR LOWER(idesc) LIKE LOWER('%${search}%')) AND priority = ${filterPriority} LIMIT ${limit} OFFSET ${offset}`;
-            } else if(search.length) {
-                const hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND (LOWER(iname) LIKE LOWER('%${search}%') OR LOWER(idesc) LIKE LOWER('%${search}%')) LIMIT ${limit} OFFSET ${offset}`;
-            } else if(filterPriority!=0) {
-                const hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND priority = ${filterPriority} LIMIT ${limit} OFFSET ${offset}`;
+            console.log('This is length of search', search);
+            console.log('This is filter priority', filterPriority);
+            let hasAnyItems;
+            if(search && filterPriority){
+                hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND (iname ILIKE '%${search}%' OR idesc ILIKE '%${search}%') AND priority = ${filterPriority} LIMIT ${limit} OFFSET ${offset}`;
+            } else if(search) {
+                hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND (iname ILIKE '%${search}%' OR idesc ILIKE '%${search}%') LIMIT ${limit} OFFSET ${offset}`;
+            } else if(filterPriority) {
+                hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND priority = ${filterPriority} LIMIT ${limit} OFFSET ${offset}`;
             } else {
-                const hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} LIMIT ${limit} OFFSET ${offset}`;
+                console.log("in the original SQL statement");
+                hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} LIMIT ${limit} OFFSET ${offset}`;
             }
             if(hasAnyItems.length===0)
                 return Error('You do not have any items in this bag.');
