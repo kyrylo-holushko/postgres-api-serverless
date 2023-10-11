@@ -10,8 +10,6 @@ exports.findItems = async (uid, bid, page, perPage, search, filterPriority) => {
         } else {
             const limit = perPage * 2;
             const offset = (perPage * page) - (limit - perPage);
-            console.log('This is length of search', search);
-            console.log('This is filter priority', filterPriority);
             let hasAnyItems;
             if(search && filterPriority){
                 hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND (iname ILIKE '%${search}%' OR idesc ILIKE '%${search}%') AND priority = ${filterPriority} LIMIT ${limit} OFFSET ${offset}`;
