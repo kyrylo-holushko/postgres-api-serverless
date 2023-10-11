@@ -18,7 +18,6 @@ exports.findItems = async (uid, bid, page, perPage, search, filterPriority) => {
             } else if(filterPriority) {
                 hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND priority = ${filterPriority} LIMIT ${limit} OFFSET ${offset}`;
             } else {
-                console.log("in the original SQL statement");
                 hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} LIMIT ${limit} OFFSET ${offset}`;
             }
             if(hasAnyItems.length===0)
