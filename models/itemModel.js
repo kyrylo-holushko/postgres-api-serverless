@@ -12,13 +12,25 @@ exports.findItems = async (uid, bid, page, perPage, search, filterPriority, colu
             const offset = (perPage * page) - (limit - perPage);
             let hasAnyItems;
             if(search && filterPriority){
-                hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND (iname ILIKE ${ '%' + search + '%' } OR idesc ILIKE ${ '%' + search + '%' }) AND priority = ${filterPriority} LIMIT ${limit} OFFSET ${offset}`;
+                if(order!==null)
+                    hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND (iname ILIKE ${ '%' + search + '%' } OR idesc ILIKE ${ '%' + search + '%' }) AND priority = ${filterPriority} ORDER BY ${column} ${order} LIMIT ${limit} OFFSET ${offset}`;
+                else
+                    hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND (iname ILIKE ${ '%' + search + '%' } OR idesc ILIKE ${ '%' + search + '%' }) AND priority = ${filterPriority} LIMIT ${limit} OFFSET ${offset}`;
             } else if(search) {
-                hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND (iname ILIKE ${ '%' + search + '%' } OR idesc ILIKE ${ '%' + search + '%' }) LIMIT ${limit} OFFSET ${offset}`;
+                if(order!==null)
+                    hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND (iname ILIKE ${ '%' + search + '%' } OR idesc ILIKE ${ '%' + search + '%' }) ORDER BY ${column} ${order} LIMIT ${limit} OFFSET ${offset}`;
+                else
+                    hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND (iname ILIKE ${ '%' + search + '%' } OR idesc ILIKE ${ '%' + search + '%' }) LIMIT ${limit} OFFSET ${offset}`;
             } else if(filterPriority) {
-                hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND priority = ${filterPriority} LIMIT ${limit} OFFSET ${offset}`;
+                if(order!==null)
+                    hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND priority = ${filterPriority} ORDER BY ${column} ${order} LIMIT ${limit} OFFSET ${offset}`;
+                else
+                    hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND priority = ${filterPriority} LIMIT ${limit} OFFSET ${offset}`;
             } else {
-                hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} LIMIT ${limit} OFFSET ${offset}`;
+                if(order!==null)
+                    hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} ORDER BY ${column} ${order} LIMIT ${limit} OFFSET ${offset}`;
+                else
+                    hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} LIMIT ${limit} OFFSET ${offset}`;
             }
             if(hasAnyItems.length===0)
                 return Error('You do not have any items in this bag.');
