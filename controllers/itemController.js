@@ -7,7 +7,9 @@ exports.getItems = (req, res) => {
         req.query.page, 
         req.query.perPage, 
         req.query.search, 
-        req.query.filterPriority
+        req.query.filterPriority,
+        req.query.column,
+        req.query.order
         ).then((result)=>{
     if(result instanceof Error)
         throw result;
