@@ -21,6 +21,9 @@ exports.getItems = (req, res) => {
 };
 
 exports.createItem = (req, res) => {
+    console.log("Image File, in body", req.body.image);
+    console.log("Bag Id,", req.body.bid);
+    console.log("Image File, in req.file", req.file);
     let data = processItemOptionals(req.body);
     Item.createItem(req.userData.userID, req.body.bid, data).then((result)=>{
         if(result instanceof Error)
@@ -56,7 +59,7 @@ exports.deleteItem = (req, res) => {
 };
 
 function processItemOptionals(data) {
-    if(!data.image)
+    if(!data.image||data.image)
         data.image = null;
     if(!data.ivolume)
         data.ivolume = null;

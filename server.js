@@ -4,6 +4,12 @@ const dotenv = require('dotenv');
 const rateLimit = require('express-rate-limit');
 const jwt = require('jsonwebtoken');
 const cors = require("cors");
+const multer = require('multer');
+
+/* Multipart Form Data */
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 /* Controllers */
 
@@ -16,7 +22,8 @@ dotenv.config();
 const { PORT, JWTSECRET } = process.env;
 
 app.use(cors());
-app.use(express.json({ limit: '1kb' }));
+
+app.use(express.json({ limit: '1mb' }));
 
 /* MIDDLEWARE */
 
@@ -78,7 +85,7 @@ app.delete('/api/bags/:id', checkAuth, bagController.deleteBag);
 /* ITEM CRUD */
 
 app.get('/api/items', checkAuth, itemController.getItems);
-app.post('/api/items', checkAuth, itemController.createItem);
+app.post('/api/items', checkAuth, upload.single('image'), itemController.createItem);
 app.put('/api/items/:id', checkAuth, itemController.editItem);
 app.delete('/api/items/:id', checkAuth, itemController.deleteItem);
 
