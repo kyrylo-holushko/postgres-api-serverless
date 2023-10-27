@@ -11,20 +11,17 @@ exports.getItems = (req, res) => {
         req.query.column,
         req.query.order
         ).then((result)=>{
-    if(result instanceof Error)
+    if(result instanceof Error){
         throw result;
-    else
-        res.status(200).json({ data: result });
+    } else {
+        res.status(200).json({ data: result });}
     }).catch(e=>{
         res.status(404).json({ message: e.message });
     });
 };
 
 exports.createItem = (req, res) => {
-    console.log("Image File, in body", req.body.image);
-    console.log("Bag Id,", req.body.bid);
-    console.log("Image File, in req.file", req.file);
-    let data = processItemOptionals(req.body);
+    let data = processItemOptionals(req.body, req.file);
     Item.createItem(req.userData.userID, req.body.bid, data).then((result)=>{
         if(result instanceof Error)
             throw result;
@@ -58,14 +55,20 @@ exports.deleteItem = (req, res) => {
     });
 };
 
-function processItemOptionals(data) {
-    if(!data.image||data.image)
-        data.image = null;
-    if(!data.ivolume)
-        data.ivolume = null;
-    if(!data.iweight)
-        data.iweight = null;
-    if(!data.priority)
-        data.priority = null;
-    return data;
+function processItemOptionals(bodyData, fileData) {
+    if(!fileData) {
+        bodyData.image = null;
+    } else {
+        bodyData.image = Buffer.from(fileData.buffer).toString('base64');
+        bodyData.mimetype = fileData.mimetype;
+    }
+
+    if(!bodyData.ivolume)
+        bodyData.ivolume = null;
+    if(!bodyData.iweight)
+        bodyData.iweight = null;
+    if(!bodyData.priority)
+        bodyData.priority = null;
+
+    return bodyData;
 };
