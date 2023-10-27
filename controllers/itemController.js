@@ -33,7 +33,7 @@ exports.createItem = (req, res) => {
 };
 
 exports.editItem = (req, res) => {
-    let data = processItemOptionals(req.body);
+    let data = processItemOptionals(req.body, req.file);
     Item.editItem(req.params.id, req.userData.userID, data).then((result)=>{
         if(result instanceof Error)
             throw result;
@@ -56,11 +56,14 @@ exports.deleteItem = (req, res) => {
 };
 
 function processItemOptionals(bodyData, fileData) {
-    if(!fileData) {
-        bodyData.image = null;
-    } else {
-        bodyData.image = Buffer.from(fileData.buffer).toString('base64');
-        bodyData.mimetype = fileData.mimetype;
+
+    if(bodyData.image!=="keep"){
+        if(!fileData){
+            bodyData.image = null;
+        } else {
+            bodyData.image = Buffer.from(fileData.buffer).toString('base64');
+            bodyData.mimetype = fileData.mimetype;
+        }
     }
 
     if(!bodyData.ivolume)

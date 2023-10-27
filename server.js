@@ -86,7 +86,7 @@ app.delete('/api/bags/:id', checkAuth, bagController.deleteBag);
 
 app.get('/api/items', checkAuth, itemController.getItems);
 app.post('/api/items', checkAuth, upload.single('image'), itemController.createItem);
-app.put('/api/items/:id', checkAuth, itemController.editItem);
+app.put('/api/items/:id', checkAuth, upload.single('image'), itemController.editItem);
 app.delete('/api/items/:id', checkAuth, itemController.deleteItem);
 
 app.put('/api/move/items', checkAuth, moveController.moveAllItems);

@@ -156,7 +156,11 @@ exports.editItem = async (iid, uid, data) => {
         } else if(!UserItems.some(item=>item.iid==iid)) {
             return Error('This is not your item!');
         } else {
-            const result = await db.sql`UPDATE items SET iname=${data.iname}, idesc=${data.idesc}, image=${data.image}, ivolume=${data.ivolume}, iweight=${data.iweight}, priority=${data.priority} WHERE iid = ${iid} RETURNING *`;
+            if(data.image==="keep"){
+                const result = await db.sql`UPDATE items SET iname=${data.iname}, idesc=${data.idesc}, ivolume=${data.ivolume}, iweight=${data.iweight}, priority=${data.priority} WHERE iid = ${iid} RETURNING *`;
+            } else {
+                const result = await db.sql`UPDATE items SET iname=${data.iname}, idesc=${data.idesc}, image=${data.image}, ivolume=${data.ivolume}, iweight=${data.iweight}, priority=${data.priority} WHERE iid = ${iid} RETURNING *`;
+            }
             return result[0];
         }
     } catch(error) {
