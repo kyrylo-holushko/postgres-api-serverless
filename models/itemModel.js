@@ -140,6 +140,7 @@ exports.createItem = async (uid, bid, data) => {
         } else if(!UserBags.some(bag=>bag.bid==bid)) { 
             return Error('This is not your bag!');
         } else {
+            console.log("HERE HERE data.image", data.image);
             const result = await db.sql`INSERT INTO items (iname, idesc, image, ivolume, iweight, priority, bid, mimetype) VALUES (${data.iname}, ${data.idesc}, ${data.image}, ${data.ivolume}, ${data.iweight}, ${data.priority}, ${bid}, ${data.mimetype}) RETURNING *`;
             return result[0];
         } 
@@ -158,8 +159,8 @@ exports.editItem = async (iid, uid, data) => {
         } else {
             if(data.image==="keep"){
                 const result = await db.sql`UPDATE items SET iname=${data.iname}, idesc=${data.idesc}, ivolume=${data.ivolume}, iweight=${data.iweight}, priority=${data.priority} WHERE iid = ${iid} RETURNING *`;
-            } else {
-                const result = await db.sql`UPDATE items SET iname=${data.iname}, idesc=${data.idesc}, image=${data.image}, ivolume=${data.ivolume}, iweight=${data.iweight}, priority=${data.priority} WHERE iid = ${iid} RETURNING *`;
+            } else {         
+                const result = await db.sql`UPDATE items SET iname=${data.iname}, idesc=${data.idesc}, image=${data.image}, ivolume=${data.ivolume}, iweight=${data.iweight}, priority=${data.priority}, mimetype=${data.mimetype} WHERE iid = ${iid} RETURNING *`;
             }
             return result[0];
         }
