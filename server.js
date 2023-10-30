@@ -5,6 +5,7 @@ const rateLimit = require('express-rate-limit');
 const jwt = require('jsonwebtoken');
 const cors = require("cors");
 const multer = require('multer');
+const helmet = require('helmet');
 
 /* Multipart Form Data */
 
@@ -22,7 +23,7 @@ dotenv.config();
 const { PORT, JWTSECRET } = process.env;
 
 app.use(cors());
-
+app.use(helmet());
 app.use(express.json({ limit: '1mb' }));
 
 /* MIDDLEWARE */
