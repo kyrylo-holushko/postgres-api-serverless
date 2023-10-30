@@ -117,22 +117,6 @@ exports.deleteUser = (req, res) => {
     });
 };
 
-/* else if(req.body.password!==req.body.passwordConfirmed)
-        res.status(500).json({ message: "Passwords don't match, Account not updated!"}); */    //do this seperately later
-
-        /* let { passwordConfirmed, ...data } = req.body;
-        bcrypt.hash(data.password, 10).then(hash=>{
-            data.password = hash; */
-
-            /* }).catch(e=>{
-            res.status(500).json({ message: e.message });
-        }); */
-
-//const payload = { uid, username, email };
-
-/* const payload = { uid: data.uid, username: data.username, email: data.email };
-            const token = jwt.sign(payload, JWTSECRET, { expiresIn: JWTEXPIRY }); */
-
 exports.passwordLink = (req, res) => {
     if(!email.validate(req.body.email)) {
         res.status(500).json({ message: "Email entered is not a valid email!"});

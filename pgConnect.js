@@ -1,4 +1,3 @@
-//const { Sequelize } = require('sequelize');
 const postgres = require('postgres');
 const dotenv = require('dotenv');
 dotenv.config();

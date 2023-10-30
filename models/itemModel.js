@@ -11,8 +11,6 @@ exports.findItems = async (uid, bid, page, perPage, search, filterPriority, colu
             const limit = perPage * 2;
             const offset = (perPage * page) - (limit - perPage);
             let hasAnyItems;
-            //const orderstr = DESC;
-            //console.log("search, filterPriority, column, order", search, filterPriority, column, order);
             if(search && filterPriority){
                 if(order!=='null'){
                     switch(column){
@@ -35,7 +33,6 @@ exports.findItems = async (uid, bid, page, perPage, search, filterPriority, colu
                                 hasAnyItems = await db.sql`SELECT iid, iname, image, idesc, priority, mimetype FROM items WHERE bid = ${bid} AND (iname ILIKE ${ '%' + search + '%' } OR idesc ILIKE ${ '%' + search + '%' }) AND priority = ${filterPriority} ORDER BY priority DESC LIMIT ${limit} OFFSET ${offset}`;
                             break;
                     }
-                    //hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND (iname ILIKE ${ '%' + search + '%' } OR idesc ILIKE ${ '%' + search + '%' }) AND priority = ${filterPriority} ORDER BY ${column} ${order} LIMIT ${limit} OFFSET ${offset}`;
                 } else {
                     hasAnyItems = await db.sql`SELECT iid, iname, image, idesc, priority, mimetype FROM items WHERE bid = ${bid} AND (iname ILIKE ${ '%' + search + '%' } OR idesc ILIKE ${ '%' + search + '%' }) AND priority = ${filterPriority} LIMIT ${limit} OFFSET ${offset}`;
                 }
@@ -61,7 +58,6 @@ exports.findItems = async (uid, bid, page, perPage, search, filterPriority, colu
                                 hasAnyItems = await db.sql`SELECT iid, iname, image, idesc, priority, mimetype FROM items WHERE bid = ${bid} AND (iname ILIKE ${ '%' + search + '%' } OR idesc ILIKE ${ '%' + search + '%' }) ORDER BY priority DESC LIMIT ${limit} OFFSET ${offset}`;
                             break;
                     }
-                    //hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND (iname ILIKE ${ '%' + search + '%' } OR idesc ILIKE ${ '%' + search + '%' }) ORDER BY ${column} ${order} LIMIT ${limit} OFFSET ${offset}`;
                 } else {
                     hasAnyItems = await db.sql`SELECT iid, iname, image, idesc, priority, mimetype FROM items WHERE bid = ${bid} AND (iname ILIKE ${ '%' + search + '%' } OR idesc ILIKE ${ '%' + search + '%' }) LIMIT ${limit} OFFSET ${offset}`;
                 }
@@ -87,12 +83,10 @@ exports.findItems = async (uid, bid, page, perPage, search, filterPriority, colu
                                 hasAnyItems = await db.sql`SELECT iid, iname, image, idesc, priority, mimetype FROM items WHERE bid = ${bid} AND priority = ${filterPriority} ORDER BY priority DESC LIMIT ${limit} OFFSET ${offset}`;
                             break;
                     }
-                    //hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} AND priority = ${filterPriority} ORDER BY ${column} ${order} LIMIT ${limit} OFFSET ${offset}`;
                 } else {
                     hasAnyItems = await db.sql`SELECT iid, iname, image, idesc, priority, mimetype FROM items WHERE bid = ${bid} AND priority = ${filterPriority} LIMIT ${limit} OFFSET ${offset}`;
                 }
             } else {
-                //console.log("Got to here!");
                 if(order!=='null') {
                     switch(column){
                         case "iname":
@@ -114,10 +108,7 @@ exports.findItems = async (uid, bid, page, perPage, search, filterPriority, colu
                                 hasAnyItems = await db.sql`SELECT iid, iname, image, idesc, priority, mimetype FROM items WHERE bid = ${bid} ORDER BY priority DESC LIMIT ${limit} OFFSET ${offset}`;
                             break;
                     }
-                    //console.log("ordered");
-                    //hasAnyItems = await db.sql`SELECT iid, iname, idesc, priority FROM items WHERE bid = ${bid} ORDER BY ${''+column} ${''+order} LIMIT ${limit} OFFSET ${offset}`;
                 } else {
-                    //console.log("un-ordered");
                     hasAnyItems = await db.sql`SELECT iid, iname, image, idesc, priority, mimetype FROM items WHERE bid = ${bid} LIMIT ${limit} OFFSET ${offset}`;
                 }
             }
@@ -140,7 +131,6 @@ exports.createItem = async (uid, bid, data) => {
         } else if(!UserBags.some(bag=>bag.bid==bid)) { 
             return Error('This is not your bag!');
         } else {
-            console.log("HERE HERE data.image", data.image);
             const result = await db.sql`INSERT INTO items (iname, idesc, image, ivolume, iweight, priority, bid, mimetype) VALUES (${data.iname}, ${data.idesc}, ${data.image}, ${data.ivolume}, ${data.iweight}, ${data.priority}, ${bid}, ${data.mimetype}) RETURNING *`;
             return result[0];
         } 

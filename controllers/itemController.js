@@ -21,7 +21,6 @@ exports.getItems = (req, res) => {
 };
 
 exports.createItem = (req, res) => {
-    console.log("Create Item req.body: ",req.body);
     let data = processItemOptionals(req.body, req.file);
     Item.createItem(req.userData.userID, req.body.bid, data).then((result)=>{
         if(result instanceof Error)
@@ -57,10 +56,8 @@ exports.deleteItem = (req, res) => {
 };
 
 function processItemOptionals(bodyData, fileData) {
-    console.log("HERE HERE ONE bodyData.image value", bodyData.image);
     if(bodyData.image!=="keep"){
         if(!fileData){
-            console.log("HERE HERE TWO bodyData.image value", bodyData.image);
             bodyData.image = null;
             bodyData.mimetype = null;
         } else {

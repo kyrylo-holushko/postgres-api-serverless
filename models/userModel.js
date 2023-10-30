@@ -52,7 +52,7 @@ exports.updateUser = async (uid, oldmail, data) => {
 
 exports.deleteUser = async (uid) => {
     try {
-        const result = await db.sql`DELETE FROM users WHERE uid = ${uid} RETURNING *`; //delete user with uid
+        const result = await db.sql`DELETE FROM users WHERE uid = ${uid} RETURNING *`;
         return result[0];
     } catch(error) {
         console.log(error);
