@@ -51,18 +51,3 @@ function processBagOptionals(data) {
         data.bweight = null;
     return data;
 };
-
-
-    // check if bag is empty first, then delete
-    // otherewise:
-    
-    // ask user if they want to move items to another bag first, change item FK bid to another bag
-    // if not tell them it will delete all the contents of the bag
-    /*
-        1. delete items with FK bid of the bag
-
-            THEN
-
-        2. delete the bag with PK bid
-    
-    */
