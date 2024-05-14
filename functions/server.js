@@ -67,43 +67,43 @@ checkAuth = (req, res, next) => {
 
 /* ROUTES */
 
-app.get('/', (req, res) => {
+router.get('/', (req, res) => {
     res.json({ message: 'root'});
 });
 
 /* USER CRUD */
 
-app.post('/api/user/signup', singUpLimiter, userController.signup);
-app.post('/api/user/login', userController.login);
-app.put('/api/user/update',  checkAuth, userController.updateUser);
-app.delete('/api/user/delete', checkAuth, userController.deleteUser);
+router.post('/api/user/signup', singUpLimiter, userController.signup);
+router.post('/api/user/login', userController.login);
+router.put('/api/user/update',  checkAuth, userController.updateUser);
+router.delete('/api/user/delete', checkAuth, userController.deleteUser);
 
-app.post('/api/user/password/link', passwordResetLimiter, userController.passwordLink);
-app.put('/api/user/password/new', checkAuth, userController.passwordNew);
+router.post('/api/user/password/link', passwordResetLimiter, userController.passwordLink);
+router.put('/api/user/password/new', checkAuth, userController.passwordNew);
 
 /* BAG CRUD */
 
-app.get('/api/bags', checkAuth, bagController.getBags);
-app.post('/api/bags', checkAuth, bagController.createBag);
-app.put('/api/bags/:id', checkAuth, bagController.editBag);
-app.delete('/api/bags/:id', checkAuth, bagController.deleteBag);
+router.get('/api/bags', checkAuth, bagController.getBags);
+router.post('/api/bags', checkAuth, bagController.createBag);
+router.put('/api/bags/:id', checkAuth, bagController.editBag);
+router.delete('/api/bags/:id', checkAuth, bagController.deleteBag);
 
 /* ITEM CRUD */
 
-app.get('/api/items', checkAuth, itemController.getItems);
-app.post('/api/items', checkAuth, upload.single('image'), itemController.createItem);
-app.put('/api/items/:id', checkAuth, upload.single('image'), itemController.editItem);
-app.delete('/api/items/:id', checkAuth, itemController.deleteItem);
+router.get('/api/items', checkAuth, itemController.getItems);
+router.post('/api/items', checkAuth, upload.single('image'), itemController.createItem);
+router.put('/api/items/:id', checkAuth, upload.single('image'), itemController.editItem);
+router.delete('/api/items/:id', checkAuth, itemController.deleteItem);
 
-app.put('/api/move/items', checkAuth, moveController.moveAllItems);
-app.put('/api/move/item/:id', checkAuth, moveController.moveOneItem);
+router.put('/api/move/items', checkAuth, moveController.moveAllItems);
+router.put('/api/move/item/:id', checkAuth, moveController.moveOneItem);
 
 
-app.all('*', (req, res) => {
+router.all('*', (req, res) => {
     res.status(404).json({ message: '404 Page Not Found' });
 });
 
-app.listen(port, ()=>{console.log("API listening on: " + port)});
+//app.listen(port, ()=>{console.log("API listening on: " + port)});
 
 
 export const handler = serverless(app);
