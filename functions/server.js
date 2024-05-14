@@ -1,5 +1,7 @@
 const express = require('express');
+const serverless = require('serverless-http');
 const app = express();
+const router = express.Router();
 const dotenv = require('dotenv');
 const rateLimit = require('express-rate-limit');
 const jwt = require('jsonwebtoken');
@@ -99,3 +101,6 @@ app.all('*', (req, res) => {
 });
 
 app.listen(PORT, ()=>{console.log("API listening on: " + PORT)});
+
+app.use('/api/', router);
+export const handler = serverless(app);
