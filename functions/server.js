@@ -104,5 +104,5 @@ app.all('*', (req, res) => {
 
 app.listen(port, ()=>{console.log("API listening on: " + port)});
 
-app.use('/.netlify/funstions/server', router);
+app.use('/.netlify/functions/server', router);
 export const handler = serverless(app);
