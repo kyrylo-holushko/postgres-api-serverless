@@ -24,6 +24,8 @@ const moveController = require('./controllers/moveController');
 dotenv.config();
 const { PORT, JWTSECRET } = process.env;
 
+const port = PORT || 8080;
+
 app.use(cors());
 app.use(helmet());
 app.use(express.json({ limit: '1mb' }));
@@ -100,7 +102,7 @@ app.all('*', (req, res) => {
     res.status(404).json({ message: '404 Page Not Found' });
 });
 
-app.listen(PORT, ()=>{console.log("API listening on: " + PORT)});
+app.listen(port, ()=>{console.log("API listening on: " + port)});
 
-app.use('/api/', router);
+app.use('/.netlify/funstions/server', router);
 export const handler = serverless(app);
