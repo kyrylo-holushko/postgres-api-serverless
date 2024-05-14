@@ -26,6 +26,7 @@ const { PORT, JWTSECRET } = process.env;
 
 const port = PORT || 8080;
 
+app.use('/.netlify/functions/server', router);
 app.use(cors());
 app.use(helmet());
 app.use(express.json({ limit: '1mb' }));
@@ -104,5 +105,5 @@ app.all('*', (req, res) => {
 
 app.listen(port, ()=>{console.log("API listening on: " + port)});
 
-app.use('/.netlify/functions/server', router);
+
 export const handler = serverless(app);
