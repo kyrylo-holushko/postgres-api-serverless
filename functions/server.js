@@ -16,10 +16,10 @@ const upload = multer({ storage: storage });
 
 /* Controllers */
 
-const userController = require('./controllers/userController');
-const bagController = require('./controllers/bagController');
-const itemController = require('./controllers/itemController');
-const moveController = require('./controllers/moveController');
+const userController = require('../src/controllers/userController');
+const bagController = require('../src/controllers/bagController');
+const itemController = require('../src/controllers/itemController');
+const moveController = require('../src/controllers/moveController');
 
 dotenv.config();
 const { PORT, JWTSECRET } = process.env;
