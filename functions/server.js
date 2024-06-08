@@ -26,10 +26,10 @@ const { PORT, JWTSECRET } = process.env;
 
 const port = PORT || 8080;
 
-app.use('/.netlify/functions/server', router);
 app.use(cors());
 app.use(helmet());
 app.use(express.json({ limit: '1mb' }));
+app.use('/.netlify/functions/server', router);
 
 /* MIDDLEWARE */
 
