@@ -3,7 +3,7 @@ const serverless = require('serverless-http');
 const app = express();
 const router = express.Router();
 const dotenv = require('dotenv');
-const rateLimit = require('express-rate-limit');
+//const rateLimit = require('express-rate-limit');
 const jwt = require('jsonwebtoken');
 const cors = require("cors");
 const multer = require('multer');
@@ -33,13 +33,13 @@ app.use('/.netlify/functions/server', router);
 
 /* MIDDLEWARE */
 
-const singUpLimiter = rateLimit({
+/* const singUpLimiter = rateLimit({
     max: 4, // 4 requests per hour
     windowMs: 60 * (60000), //60 minutes limit
     message: 'Too many accounts created from this IP, please try again after an hour',
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-});
+}); */
 
 const passwordResetLimiter = rateLimit({
     max: 3, // 3 requests per 24 hours
@@ -73,7 +73,7 @@ router.get('/', (req, res) => {
 
 /* USER CRUD */
 
-router.post('/api/user/signup', singUpLimiter, userController.signup);
+router.post('/api/user/signup', /*singUpLimiter,*/ userController.signup);
 router.post('/api/user/login', userController.login);
 router.put('/api/user/update',  checkAuth, userController.updateUser);
 router.delete('/api/user/delete', checkAuth, userController.deleteUser);
