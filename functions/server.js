@@ -41,13 +41,13 @@ app.use('/.netlify/functions/server', router);
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 }); */
 
-const passwordResetLimiter = rateLimit({
+/* const passwordResetLimiter = rateLimit({
     max: 3, // 3 requests per 24 hours
     windowMs: 24 * 60 * (60000), //24 hour limit
     message: 'Too many password resets, please check your email for your latest reset link',
     standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
 	legacyHeaders: false, // Disable the `X-RateLimit-*` headers
-});
+}); */
 
 checkAuth = (req, res, next) => {
     if(req.method==='OPTIONS')
@@ -78,7 +78,7 @@ router.post('/api/user/login', userController.login);
 router.put('/api/user/update',  checkAuth, userController.updateUser);
 router.delete('/api/user/delete', checkAuth, userController.deleteUser);
 
-router.post('/api/user/password/link', passwordResetLimiter, userController.passwordLink);
+router.post('/api/user/password/link', /*passwordResetLimiter,*/ userController.passwordLink);
 router.put('/api/user/password/new', checkAuth, userController.passwordNew);
 
 /* BAG CRUD */
