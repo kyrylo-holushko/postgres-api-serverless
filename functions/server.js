@@ -26,7 +26,10 @@ const { PORT, JWTSECRET } = process.env;
 
 const port = PORT || 8080;
 
-app.use(cors());
+app.use(cors({
+    origin: 'https://next-app-bags.vercel.app',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
+}));
 app.use(helmet());
 app.use(express.json({ limit: '1mb' }));
 app.use('/.netlify/functions/server', router);
