@@ -7,6 +7,7 @@ exports.createUser = async (data) => {
             return Error('An account with this email already exists!');
         }
         const result = await db.sql`INSERT INTO users (username, email, password) VALUES (${data.username}, ${data.email}, ${data.password}) RETURNING *`;
+        console.log('RETURN from DB after record creation', result[0]);
         return result[0];
     } catch(error) {
         console.log(error);
